@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Browser UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 60%;
+            max-width: 800px;
+            min-width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .messages div {
+            margin: 5px 0;
+        }
+        .user-message {
+            text-align: right;
+            color: blue;
+        }
+        .bot-message {
+            text-align: left;
+            color: green;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="query" placeholder="Type your message here..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById("messages");
+
+        async function sendMessage() {
+            const queryInput = document.getElementById("query");
+            const userMessage = queryInput.value.trim();
+            if (!userMessage) return;
+
+            // Display the user's message
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.className = "user-message";
+            userMessageDiv.textContent = userMessage;
+            messagesDiv.appendChild(userMessageDiv);
+
+            // Clear the input
+            queryInput.value = "";
+
+            // Send the query to the backend
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ query: userMessage })
+                });
+                const data = await response.json();
+
+                // Display the bot's response
+                const botMessageDiv = document.createElement("div");
+                botMessageDiv.className = "bot-message";
+                botMessageDiv.textContent = data.response || data.error || "Error";
+                messagesDiv.appendChild(botMessageDiv);
+            } catch (error) {
+                const errorDiv = document.createElement("div");
+                errorDiv.className = "bot-message";
+                errorDiv.textContent = "An error occurred: " + error.message;
+                messagesDiv.appendChild(errorDiv);
+            }
+
+            // Scroll to the bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
