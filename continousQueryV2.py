@@ -4,8 +4,8 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Step 1: Load the PDF file and extract text
-#pdf_file_path = r"C:\Shaunak\AI Tutor\PaperForREf.pdf"
-pdf_file_path = r"C:\Shaunak\AI Tutor\Chemistry2e-OpenStax.pdf"
+#pdf_file_path = r"C<location>"
+pdf_file_path = r"C:\temp\Chemistry2e-OpenStax.pdf"
 text_data = []
 
 # Extract text from each page
@@ -95,8 +95,8 @@ while True:
     print(answer)
     print("Suggested Questions: ")
     print(stream.choices[0].message.content)
-#    for part in stream:
-#        print(part.choices[0].delta.content or "")
+#    Set limit here to safguard against using up too many credits from an API
+#    delete the two lines below for no limt
 
     if ( n > 25):
         break
