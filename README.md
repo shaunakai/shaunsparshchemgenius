@@ -23,3 +23,9 @@ How to run the program
 3. To safeguard it from running too many prompts and use up credit we have put up a limit of 25 queries in one session.
    Change this limit at line 101 in continousQueryV2.py
 
+HOW TO INSTALL:
+1. git clone https://github.com/shaunakai/shaunsparshchemgenius.git
+2. pip install -r requirements.txt   ( install pip ex:  sudo apt install python3-pip)
+3. python3 continousQuery.py         ( make sure the chemSample pdf file is stored in the docs/ directory)
+4. To create a standalone binary run
+    pyinstaller.exe --onefile continousQueryV2.py
